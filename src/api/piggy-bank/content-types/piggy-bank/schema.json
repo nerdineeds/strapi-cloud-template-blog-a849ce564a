@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "piggy_banks",
+  "info": {
+    "singularName": "piggy-bank",
+    "pluralName": "piggy-banks",
+    "displayName": "Piggy Bank"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "goalAmount": {
+      "type": "decimal"
+    },
+    "currentAmount": {
+      "type": "decimal",
+      "default": 0
+    },
+    "progressStatus": {
+      "type": "enumeration",
+      "enum": [
+        "active",
+        "completed",
+        "canceled"
+      ]
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "piggy_banks"
+    }
+  }
+}
