@@ -4,7 +4,8 @@
   "info": {
     "singularName": "piggy-bank",
     "pluralName": "piggy-banks",
-    "displayName": "Piggy Bank"
+    "displayName": "Lamps",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -29,11 +30,17 @@
         "canceled"
       ]
     },
-    "users_permissions_user": {
+    "wish": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::wish.wish",
+      "inversedBy": "lamp"
+    },
+    "user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "piggy_banks"
+      "inversedBy": "lamps"
     }
   }
 }

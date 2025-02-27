@@ -9,7 +9,7 @@
     "displayName": "User"
   },
   "options": {
-    "timestamps": true
+    "draftAndPublish": false
   },
   "attributes": {
     "username": {
@@ -65,11 +65,33 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "piggy_banks": {
+    "Avatar": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "wishes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::wish.wish",
+      "mappedBy": "user"
+    },
+    "finances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::finance.finance",
+      "mappedBy": "user"
+    },
+    "lamps": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::piggy-bank.piggy-bank",
-      "mappedBy": "users_permissions_user"
+      "mappedBy": "user"
     }
   }
 }

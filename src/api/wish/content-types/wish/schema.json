@@ -1,0 +1,79 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wishes",
+  "info": {
+    "singularName": "wish",
+    "pluralName": "wishes",
+    "displayName": "Wish",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "progress": {
+      "type": "decimal"
+    },
+    "priority": {
+      "type": "enumeration",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "wishes"
+    },
+    "imageUrl": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "url": {
+      "type": "string"
+    },
+    "wishStatus": {
+      "type": "enumeration",
+      "enum": [
+        "IMCOMPLETE",
+        "GRANTED"
+      ]
+    },
+    "isGoalWish": {
+      "type": "boolean",
+      "default": false
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::category.category",
+      "mappedBy": "wish"
+    },
+    "lamp": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::piggy-bank.piggy-bank",
+      "mappedBy": "wish"
+    }
+  }
+}

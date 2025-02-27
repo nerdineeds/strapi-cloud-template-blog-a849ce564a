@@ -414,7 +414,6 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
     blocks: Schema.Attribute.DynamicZone<
       ['shared.media', 'shared.quote', 'shared.rich-text', 'shared.slider']
     >;
-    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     cover: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -482,7 +481,6 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
-    articles: Schema.Attribute.Relation<'oneToMany', 'api::article.article'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -499,6 +497,44 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    wish: Schema.Attribute.Relation<'manyToOne', 'api::wish.wish'>;
+  };
+}
+
+export interface ApiFinanceFinance extends Struct.CollectionTypeSchema {
+  collectionName: 'finances';
+  info: {
+    description: '';
+    displayName: 'Finance';
+    pluralName: 'finances';
+    singularName: 'finance';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    amount: Schema.Attribute.Decimal;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    dueDate: Schema.Attribute.Date;
+    financeStatus: Schema.Attribute.Enumeration<['WAITING', 'PAID', 'UNPAID']>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::finance.finance'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    type: Schema.Attribute.Enumeration<['INCOME', 'BILL', 'DEBT']>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -537,7 +573,8 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
 export interface ApiPiggyBankPiggyBank extends Struct.CollectionTypeSchema {
   collectionName: 'piggy_banks';
   info: {
-    displayName: 'Piggy Bank';
+    description: '';
+    displayName: 'Lamps';
     pluralName: 'piggy-banks';
     singularName: 'piggy-bank';
   };
@@ -564,10 +601,54 @@ export interface ApiPiggyBankPiggyBank extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users_permissions_user: Schema.Attribute.Relation<
+    user: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+    wish: Schema.Attribute.Relation<'oneToOne', 'api::wish.wish'>;
+  };
+}
+
+export interface ApiWishWish extends Struct.CollectionTypeSchema {
+  collectionName: 'wishes';
+  info: {
+    description: '';
+    displayName: 'Wish';
+    pluralName: 'wishes';
+    singularName: 'wish';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    categories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::category.category'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    imageUrl: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    isGoalWish: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    lamp: Schema.Attribute.Relation<'oneToOne', 'api::piggy-bank.piggy-bank'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::wish.wish'> &
+      Schema.Attribute.Private;
+    price: Schema.Attribute.Decimal;
+    priority: Schema.Attribute.Enumeration<['low', 'medium', 'high']>;
+    progress: Schema.Attribute.Decimal;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    url: Schema.Attribute.String;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    wishStatus: Schema.Attribute.Enumeration<['IMCOMPLETE', 'GRANTED']>;
   };
 }
 
@@ -1026,9 +1107,9 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
+    Avatar: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1040,6 +1121,8 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    finances: Schema.Attribute.Relation<'oneToMany', 'api::finance.finance'>;
+    lamps: Schema.Attribute.Relation<'oneToMany', 'api::piggy-bank.piggy-bank'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1051,10 +1134,6 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
-    piggy_banks: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::piggy-bank.piggy-bank'
-    >;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1071,6 +1150,7 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 3;
       }>;
+    wishes: Schema.Attribute.Relation<'oneToMany', 'api::wish.wish'>;
   };
 }
 
@@ -1088,8 +1168,10 @@ declare module '@strapi/strapi' {
       'api::article.article': ApiArticleArticle;
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
+      'api::finance.finance': ApiFinanceFinance;
       'api::global.global': ApiGlobalGlobal;
       'api::piggy-bank.piggy-bank': ApiPiggyBankPiggyBank;
+      'api::wish.wish': ApiWishWish;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
