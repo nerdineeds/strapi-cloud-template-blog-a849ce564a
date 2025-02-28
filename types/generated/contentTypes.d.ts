@@ -518,7 +518,8 @@ export interface ApiFinanceFinance extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     dueDate: Schema.Attribute.Date;
-    financeStatus: Schema.Attribute.Enumeration<['WAITING', 'PAID', 'UNPAID']>;
+    financeStatus: Schema.Attribute.Enumeration<['WAITING', 'PAID', 'UNPAID']> &
+      Schema.Attribute.DefaultTo<'UNPAID'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
