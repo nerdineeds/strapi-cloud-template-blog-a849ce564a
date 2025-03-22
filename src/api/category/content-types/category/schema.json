@@ -20,12 +20,6 @@
     },
     "description": {
       "type": "text"
-    },
-    "wish": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::wish.wish",
-      "inversedBy": "categories"
     }
   }
 }

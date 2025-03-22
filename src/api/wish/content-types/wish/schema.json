@@ -63,12 +63,6 @@
       "type": "boolean",
       "default": false
     },
-    "categories": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::category.category",
-      "mappedBy": "wish"
-    },
     "lamp": {
       "type": "relation",
       "relation": "oneToOne",
