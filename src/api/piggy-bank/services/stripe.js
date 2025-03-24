@@ -4,6 +4,8 @@ const Stripe = require('stripe');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+console.log('Loaded Stripe key:', process.env.STRIPE_SECRET_KEY);
+
 module.exports = {
   async createCheckoutSession(userId, piggyBankId, amount) {
     const piggyBank = await strapi.entityService.findOne('api::piggy-bank.piggy-bank', piggyBankId, {
